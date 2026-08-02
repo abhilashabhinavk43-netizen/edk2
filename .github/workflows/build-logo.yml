@@ -21,19 +21,19 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential uuid-dev nasm acpica-tools gcc-x86-64-linux-gnu
+        sudo apt-get install -y build-essential uuid-dev nasm acpica-tools
 
-    - name: Build BaseTools and LogoDxe
+    - name: Compile LogoDxe
       run: |
+        python3 BaseTools/BinToPatch/BinToPatch.py || true
+        export PYTHON_COMMAND=python3
         make -C BaseTools
-        source edksetup.sh
+        . edksetup.sh
         build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC5 -b RELEASE
 
-    - name: Upload LogoDxe Artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: LogoDxe-Custom
-        path: |
-          Build/MdeModule/RELEASE_GCC5/X64/LogoDxe.efi
-          Build/MdeModule/RELEASE_GCC5/X64/MdeModulePkg/Logo/LogoDxe/DEBUG/LogoDxe.efi
-          
+        path: Build/MdeModule/RELEASE_GCC5/X64/LogoDxe.efi
+        
