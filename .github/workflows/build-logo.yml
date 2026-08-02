@@ -30,10 +30,10 @@ jobs:
         run: |
           export PYTHON_COMMAND=python3
           . edksetup.sh
-          build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC5
+          build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: LogoDxe-Custom
-          path: Build/MdeModulePkg/*/DEBUG_GCC5/X64/LogoDxe.efi
+          path: Build/MdeModulePkg/*/DEBUG_GCC/X64/LogoDxe.efi
