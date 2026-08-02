@@ -1,0 +1,35 @@
+name: Build Custom LogoDxe
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential uuid-dev python3 nasm acpica-tools gcc-x86-64-linux-gnu
+
+    - name: Build BaseTools
+      run: |
+        make -C BaseTools
+
+    - name: Build LogoDxe.efi
+      run: |
+        source edksetup.sh
+        build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC5 -b RELEASE
+
+    - name: Upload LogoDxe Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: LogoDxe-Custom
+        path: Build/MdeModule/RELEASE_GCC5/X64/MdeModulePkg/Logo/LogoDxe/DEBUG/LogoDxe.efi
+        
