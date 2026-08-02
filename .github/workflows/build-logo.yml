@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: LogoDxe-Custom
-          path: Build/MdeModulePkg/*/DEBUG_GCC/X64/LogoDxe.efi
+          path: Build/MdeModulePkg/**/LogoDxe.efi
