@@ -6,34 +6,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
 
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential uuid-dev nasm acpica-tools
+      - name: Install Build Essentials
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-api uuid-dev nasm IASL
 
-    - name: Compile LogoDxe
-      run: |
-        python3 BaseTools/BinToPatch/BinToPatch.py || true
-        export PYTHON_COMMAND=python3
-        make -C BaseTools
-        . edksetup.sh
-        build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC5 -b RELEASE
+      - name: Compile BaseTools C Modules
+        run: |
+          make -C BaseTools/Source/C
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: LogoDxe-Custom
-        path: Build/MdeModule/RELEASE_GCC5/X64/LogoDxe.efi
-        
+      - name: Build LogoDxe
+        run: |
+          export PYTHON_COMMAND=python3
+          . edksetup.sh
+          build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC5
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LogoDxe-Custom
+          path: Build/MdeModulePkg/*/DEBUG_GCC5/X64/LogoDxe.efi
