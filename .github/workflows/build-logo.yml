@@ -18,7 +18,7 @@ jobs:
       - name: Install Build Essentials
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-api uuid-dev nasm IASL
+          sudo apt-get install -y build-essential uuid-dev nasm acpica-tools
 
       - name: Compile BaseTools C Modules
         run: |
