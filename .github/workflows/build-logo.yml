@@ -26,6 +26,7 @@ jobs:
         run: |
           # Convert image using standard 'convert' command to strict 24-bit BMPv3
           convert MdeModulePkg/Logo/Logo.bmp -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
 
       - name: Compile BaseTools C Modules
         run: |
