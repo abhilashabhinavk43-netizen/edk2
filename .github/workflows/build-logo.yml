@@ -25,9 +25,8 @@ jobs:
 
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          # Scale image to fit within 640x480 and pad background to strict 24-bit BMPv3
-          convert MdeModulePkg/Logo/Logo.bmp -resize '640x480>' -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
-
+          convert MdeModulePkg/Logo/Logo.bmp -resize '180x180>' -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
       - name: Compile BaseTools C Modules
         run: |
           make -C BaseTools/Source/C
