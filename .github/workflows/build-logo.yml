@@ -22,12 +22,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
-      - name: Fix and Format Logo.bmp for EDK2 Specs
-        run: |
-          # 1. Fits the image safely within 500x375 so no edges get cut
-          # 2. Pads background to 640x480 canvas cleanly without wrapping lines
-          convert MdeModulePkg/Logo/Logo.bmp -resize '500x375>' -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
-          
+
 
       - name: Compile BaseTools C Modules
         run: |
@@ -38,7 +33,12 @@ jobs:
           export PYTHON_COMMAND=python3
           . edksetup.sh
           build -p MdeModulePkg/MdeModulePkg.dsc -m MdeModulePkg/Logo/LogoDxe.inf -a X64 -t GCC
-
+      - name: Fix and Format Logo.bmp for EDK2 Specs
+        run: |
+          # 1. +page removes embedded canvas offsets/metadata causing line wrapping
+          # 2. Resizes safely to 480x360 and centers on a clean 640x480 BMPv3 frame
+          convert MdeModulePkg/Logo/Logo.bmp +page -resize 480x360 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
