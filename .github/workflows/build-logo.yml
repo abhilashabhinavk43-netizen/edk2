@@ -22,11 +22,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
-
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          # Scale to 450x450, shift 80px right (+80+0), pad canvas to 640x480
-          convert MdeModulePkg/Logo/Logo.bmp -resize '450x450>' -geometry +80+0 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          # 1. -trim removes surrounding black padding so artwork bounds are exact
+          # 2. -resize scales the graphic to 300x300 max
+          # 3. EDK2 centers this 300x300 image perfectly in the middle of the screen
+          convert MdeModulePkg/Logo/Logo.bmp -fuzz 5% -trim +repage -resize '300x300>' -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
 
       - name: Compile BaseTools C Modules
         run: |
