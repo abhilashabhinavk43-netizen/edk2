@@ -25,8 +25,8 @@ jobs:
 
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          # Flips hand to right side, scales up to 400x400, pads canvas to 640x480
-          convert MdeModulePkg/Logo/Logo.bmp -flop -resize '400x400>' -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          # Keep original direction, scale up to 400x400, and center on 640x480 canvas
+          convert MdeModulePkg/Logo/Logo.bmp -resize '400x400>' -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
 
       - name: Compile BaseTools C Modules
         run: |
