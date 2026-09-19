@@ -20,15 +20,11 @@ jobs:
 
       - name: Install Build Essentials & ImageMagick
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
+          sudo DEBIAN_FRONTEND=noninteractive apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
 
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          # 1. +page clears page metadata
-          # 2. -fuzz 10% -trim +repage tightly crops the artwork lines
-          # 3. Scales down to 300x225 so neither the arm on the left nor the hand on the right touch the canvas edge
-          # 4. Perfectly centers the full artwork on a strict 640x480 BMPv3 frame
           convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 10% -trim +repage -resize 300x225 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
 
       - name: Compile BaseTools C Modules
