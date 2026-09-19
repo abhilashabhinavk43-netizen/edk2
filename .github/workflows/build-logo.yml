@@ -25,7 +25,9 @@ jobs:
 
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 10% -trim +repage -resize 400x300 -background black -gravity center -page -30+0 -flatten -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          # 1. Resizes to 360x270 so the full drawing fits easily without stretching
+          # 2. -page -80+0 shifts the placement 80px left to perfectly reconnect the hand and arm
+          convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 10% -trim +repage -resize 360x270 -background black -gravity center -page -80+0 -flatten -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
           
       - name: Compile BaseTools C Modules
         run: |
