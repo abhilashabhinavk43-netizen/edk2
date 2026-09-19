@@ -25,7 +25,11 @@ jobs:
 
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 10% -trim +repage -resize 300x225 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          # 1. +page clears page metadata without cropping your custom black padding
+          # 2. Resizes safely to fit the frame while preserving your manual alignment
+          # 3. Formats strictly to EDK2 specs (640x480, 24-bit uncompressed BMPv3)
+          convert MdeModulePkg/Logo/Logo.bmp +page -resize 400x300 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
 
       - name: Compile BaseTools C Modules
         run: |
