@@ -24,11 +24,12 @@ jobs:
           sudo apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
       - name: Fix and Format Logo.bmp for EDK2 Specs
         run: |
-          # 1. +page clears page geometry metadata
-          # 2. -fuzz 5% -trim +repage crops tightly around the drawn lines only
-          # 3. -resize scales the drawing safely to 480x360
-          # 4. -gravity center -extent 640x480 pads equal black margins on all 4 sides
-          convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 5% -trim +repage -resize 480x360 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          # 1. Strips all embedded page offsets and metadata
+          # 2. -fuzz 10% -trim crops out all stray/faint edge pixels causing line wrapping
+          # 3. Scales the graphic down to 400x300 so the hand and arm never overflow
+          # 4. Pads to strict 640x480 BMPv3 canvas centered in background
+          convert MdeModulePkg/Logo/Logo.bmp +page -fuzz 10% -trim +repage -resize 400x300 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
+          
           
       - name: Compile BaseTools C Modules
         run: |
