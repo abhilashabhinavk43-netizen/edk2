@@ -18,18 +18,14 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Build Essentials & ImageMagick
+      - name: Install Build Essentials
         run: |
           sudo DEBIAN_FRONTEND=noninteractive apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential uuid-dev nasm acpica-tools imagemagick
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential uuid-dev nasm acpica-tools
 
-      - name: Fix and Format Logo.bmp for EDK2 Specs
+      - name: Verify Logo.bmp Specs
         run: |
-          # 1. +page clears page metadata without cropping your custom black padding
-          # 2. Resizes safely to fit the frame while preserving your manual alignment
-          # 3. Formats strictly to EDK2 specs (640x480, 24-bit uncompressed BMPv3)
-          convert MdeModulePkg/Logo/Logo.bmp +page -resize 400x300 -background black -gravity center -extent 640x480 -type TrueColor -define bmp:format=bmp3 MdeModulePkg/Logo/Logo.bmp
-          
+          ls -la MdeModulePkg/Logo/Logo.bmp
 
       - name: Compile BaseTools C Modules
         run: |
@@ -48,4 +44,3 @@ jobs:
           path: |
             Build/MdeModulePkg/**/LogoDxe.efi
             **/LogoDxe.efi
-            
